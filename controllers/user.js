@@ -1,6 +1,8 @@
 //On importe notre package bcrypt qui permet le cryptage pour les mots de passe
 const bcrypt = require('bcrypt');
-
+//On importe notre package jsonwebtoken qui permet de créer des tokens
+//et de les vérifier
+const jwt = require('jsonwebtoken');
 //On importe notre modèle
 const User = require('../models/User');
 
@@ -35,7 +37,7 @@ exports.login = (req, res, next) => {
        .then(user => {
             //L'utilisateur n'existe pas dans la base
            if (!user) {
-               res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
+               return res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
            }else{
            //Si l'utilisateur est enregistré dans la base on compare le mdp
            //de la base avec celui qui a été transmis avec compare
@@ -43,13 +45,21 @@ exports.login = (req, res, next) => {
                .then(valid => {
                     //Mdp incorrecte
                    if (!valid) {
-                       res.status(401).json({ message: 'Paire login/mot de passe incorrecte' });
+                       return res.status(401).json({ message: 'Paire login/mot de passe incorrecte' });
                     //mdp correcte on retourne un objet avec l'id utilisateur
                     //et un token
                    }else{
                         res.status(200).json({
                             userId: user._id,
-                            token: 'TOKEN'
+                            //On appelle une fonction sign de jsonwebtoken
+                            token: jwt.sign(
+                                //userId = l'identifiant du user
+                                { userId: user._id },
+                                //Clé secret pour l'encodage
+                                'RANDOM_TOKEN_SECRETS',
+                                //Expiration du token de 24h
+                                { expiresIn: '24h' }        
+                            )
                         });
                     }
                })
