@@ -1,0 +1,41 @@
+//On importe express
+const express = require('express');
+//On importe mongoose
+const mongoose = require('mongoose');
+//On importe le routeur
+const sauceRoutes = require('./routes/sauce');
+//On importe le routeur
+const userRoutes = require('./routes/user');
+//Constante app qui permet de créer une application express
+const app = express();
+//Ce middleware nous permet d'extraire le corps JSON
+//afin de gérer la requête POST venant du front-end
+app.use(express.json());
+
+//Notre API est à présent connectée à notre base de données
+mongoose.connect('mongodb+srv://jimbob:Meknes64@cluster0-pme76.mongodb.net/test?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+//CORS middleware général appliqué à toutes les routes,
+//à toutes les requêtes envoyées par notre serveur
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  next();
+});
+
+//On indique le début de la route et pour cette route on utilise le routeur
+//qui est exposé par sauceRoutes
+app.use('/api/sauces', sauceRoutes);
+//Pour cette route on utilise le routeur qui est exposé par userRoutes
+app.use('/api/auth', userRoutes);
+
+//On exporte cette constante app pour qu'on puisse y accéder depuis
+//les autres fichiers de notre projet
+module.exports = app;
+
+
