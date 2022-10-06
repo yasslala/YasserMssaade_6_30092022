@@ -1,7 +1,7 @@
 //On importe jsonwebtoken pour vérifer les tokens
 const jwt = require('jsonwebtoken');
 
-//On exporte une fonction qui sera notre middlexare
+//On exporte une fonction qui sera notre middleware
 module.exports = (req, res, next) => {
     //Try...catch nous permet gérer les erreurs
    try {

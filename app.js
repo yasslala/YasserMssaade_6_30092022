@@ -8,9 +8,6 @@ const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 //Constante app qui permet de créer une application express
 const app = express();
-//Ce middleware nous permet d'extraire le corps JSON
-//afin de gérer la requête POST venant du front-end
-app.use(express.json());
 
 //Notre API est à présent connectée à notre base de données
 mongoose.connect('mongodb+srv://jimbob:Meknes64@cluster0-pme76.mongodb.net/test?retryWrites=true&w=majority',
@@ -18,6 +15,10 @@ mongoose.connect('mongodb+srv://jimbob:Meknes64@cluster0-pme76.mongodb.net/test?
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+//Ce middleware nous permet d'extraire le corps JSON
+//afin de gérer la requête POST venant du front-end
+app.use(express.json());
 
 //CORS middleware général appliqué à toutes les routes,
 //à toutes les requêtes envoyées par notre serveur
