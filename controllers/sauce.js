@@ -6,8 +6,7 @@ const Sauce = require('../models/Sauce');
 
 //On exporte la fonction createSauce pour la création d'une sauce
 exports.createSauce = (req, res, next) => {
-    //Le front-end renvoie un id qui n'est pas le bon et qu'on supprime
-    delete req.body._id;
+    
     //Nouvelle instance de notre modèle Sauce avec un objet
     //contenant toutes les infos en utilisant le raccourci ...req.body
     const sauce = new Sauce({
@@ -35,7 +34,7 @@ exports.deleteSauce = (req, res, next) => {
     //Argument l'objet de comparaison donc l'id des paramètres de route
     Sauce.deleteOne({ _id: req.params.id })
       //On renvoie la réponse
-      .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+      .then(() => res.status(204))
       .catch(error => res.status(400).json({ error }));
 };
 

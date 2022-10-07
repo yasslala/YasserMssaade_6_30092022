@@ -56,7 +56,7 @@ exports.login = (req, res, next) => {
                                 //userId = l'identifiant du user
                                 { userId: user._id },
                                 //Clé secret pour l'encodage
-                                'RANDOM_TOKEN_SECRETS',
+                                'RANDOM_TOKEN_SECRET',
                                 //Expiration du token de 24h
                                 { expiresIn: '24h' }        
                             )

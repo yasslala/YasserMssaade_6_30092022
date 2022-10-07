@@ -10,7 +10,7 @@ const userRoutes = require('./routes/user');
 const app = express();
 
 //Notre API est à présent connectée à notre base de données
-mongoose.connect('mongodb+srv://jimbob:Meknes64@cluster0-pme76.mongodb.net/test?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://yassla:Meknes64@cluster0.ezvpujd.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

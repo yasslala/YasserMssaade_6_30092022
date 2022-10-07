@@ -3,7 +3,7 @@
 //On importe express
 const express = require('express');
 //On importe notre middleware
-const auth = require('auth');
+const auth = require('../middleware/auth');
 //On créé un routeur avec la méthode Router d'express et on enregistre
 //toutes les routes sur le routeur
 const router = express.Router();
