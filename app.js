@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const sauceRoutes = require('./routes/sauce');
 //On importe le routeur
 const userRoutes = require('./routes/user');
+
+const path = require('path');
 //Constante app qui permet de créer une application express
 const app = express();
 
@@ -34,6 +36,9 @@ app.use((req, res, next) => {
 app.use('/api/sauces', sauceRoutes);
 //Pour cette route on utilise le routeur qui est exposé par userRoutes
 app.use('/api/auth', userRoutes);
+//Route qui sert des fichiers statiques, les images de sauces
+//Cela permet le téléchargement des fichiers
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //On exporte cette constante app pour qu'on puisse y accéder depuis
 //les autres fichiers de notre projet
