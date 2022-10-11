@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     //Try...catch nous permet gérer les erreurs
    try {
         //On récupère notre token du header Authorization de la requête entrante
-        //
+        //avec la méthode split on récupère le token
        const token = req.headers.authorization.split(' ')[1];
         //On décode le token avec la méthode verify de jsonwaebtoken
         //on lui passe le token récupéré ainsi que la clé secrète
