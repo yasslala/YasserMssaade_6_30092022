@@ -110,3 +110,65 @@ exports.getAllSauces = (req, res, next) => {
       .then(sauces => res.status(200).json(sauces))
       .catch(error => res.status(400).json({ error }));
 };
+
+//On exporte la fonction likeAndDislikeSauce qui permet de liker et disliker
+exports.likeAndDislikeSauce = (req, res, next) => {
+  // On récupère le like de la requête du body
+  let like = req.body.like;
+  // On récupère l'userId
+  let userId = req.body.userId;
+  // On récupère l'id de la sauce
+  let sauceId = req.params.id;
+
+  //Si l'utlisateur like
+  if(like === 1){
+    //On met à jour la sauce ayant l'id correspondant à sauceId
+    Sauce.updateOne({ _id: sauceId }, 
+      //Grâce à l'opérateur $push on ajoute l'userId au tableau usersLiked
+      //Grâce à l'opérateur $inc on incrémente à likes
+      { $push: { usersLiked: userId }, $inc: { likes: +1 } })
+      .then(() => res.status(200).json({ message: "L'utilisateur a bien ajouté un like." }))
+      .catch(error => res.status(400).json({ error }));
+  }
+
+  //Si l'utlisateur dislike
+  if(like === -1){
+    //On met à jour la sauce ayant l'id correspondant à sauceId
+    Sauce.updateOne({ _id: sauceId },
+      //On ajoute l'userId au tableau usersDisliked et on incrémente dislikes
+      { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } })
+      .then(() => res.status(200).json({ message: "L'utilisateur a bien ajouté un dislike." }))
+      .catch(error => res.status(400).json({ error }));
+  }
+
+  //Si l'uilisateur enlève son like ou son dislike
+  if(like === 0){
+    //On cherche la sauce ayant le même _id que le paramètre de requête
+    Sauce.findOne({ _id: sauceId })
+    //On récupère notre sauce
+    .then((sauce) => {
+      //Si l'userId est déjà dans notre tableau usersLiked de notre sauce
+      if (sauce.usersLiked.includes(userId)){
+        //On met à jour la sauce ayant l'id correspondant à sauceId
+        Sauce.updateOne({ _id: sauceId },
+          //Grâce à l'opérateur $pull on supprime userId du tableau 
+          //usersLiked et on décrémente likes
+          { $pull: { usersLiked: userId }, $inc: { likes: -1 } })
+          .then(() => res.status(200).json({ message: "L'utilisateur a bien retiré son like." }))
+          .catch( error => res.status(400).json({ error }));
+      }
+
+      //Si l'userId est déjà dans notre tableau usersDisliked de notre sauce
+      if (sauce.usersDisliked.includes(userId)){
+        //On met à jour la sauce ayant l'id correspondant à sauceId
+        Sauce.updateOne({ _id: sauceId },
+          //On supprime l'userId du tableau usersDisliked et 
+          //on décrémente dislikes
+          { $pull: { usersDisLiked: userId }, $inc: { dislikes: -1 } })
+          .then(() => res.status(200).json({ message: "L'utilisateur a bien retiré son dislike." }))
+          .catch( error => res.status(400).json({ error }));
+      }
+    })
+    .catch( error => res.status(400).json({ error }));
+  }
+};
