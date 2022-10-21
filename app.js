@@ -1,5 +1,6 @@
 //On importe express
 const express = require('express');
+const rateLimit = require('express-rate-limit')
 //On importe mongoose
 const mongoose = require('mongoose');
 //On importe le routeur
@@ -10,6 +11,13 @@ const userRoutes = require('./routes/user');
 const path = require('path');
 //Constante app qui permet de créer une application express
 const app = express();
+
+app.use(rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limite à 100 requêtes toutes les 15 minutes
+	standardHeaders: true, // Donne les infos de la limite dans le header `RateLimit-*`
+	legacyHeaders: false, // Désactive le header `X-RateLimit-*`
+}));
 
 //Notre API est à présent connectée à notre base de données
 mongoose.connect('mongodb+srv://yassla:Meknes64@cluster0.ezvpujd.mongodb.net/?retryWrites=true&w=majority',

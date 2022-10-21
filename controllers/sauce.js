@@ -10,10 +10,6 @@ const fs = require('fs');
 exports.createSauce = (req, res, next) => {
     //On parse l'objet pour récupérer ses infos
     const sauceObject = JSON.parse(req.body.sauce);
-    //On supprime l'_id car il va être généré automatiquement par la base
-    //delete sauceObject._id;
-    //On supprime l'userId car nous nous utilisons l'userId du token
-    //delete sauceObject.userId;
     //Nouvelle instance de notre modèle Sauce avec un objet
     //contenant toutes les infos en utilisant le raccourci ...sauceObject
     const sauce = new Sauce({
@@ -36,8 +32,6 @@ exports.modifySauce = (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
       //Si non on récupère l'objet dans le corps de la requête
     } : { ...req.body}; // req.body.sauce ??
-    //On supprime l'userId car nous nous utilisons l'userId du token
-    //delete sauceObject.userId;
     //On récupère notre objet en base de données
     Sauce.findOne({_id: req.params.id})
     .then((sauce) => {
