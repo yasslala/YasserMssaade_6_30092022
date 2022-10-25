@@ -9,7 +9,7 @@ const User = require('../models/User');
 //Middleware permettant l'enregistrement de nouveaux utilisateurs
 exports.signup = (req, res, next) => {
     //Fonction permettant de hasher, crypter un motde passe
-    //Avec le mdp du corps de la requête et le solde (combien de fois 
+    //Avec le mdp du corps de la requête et le salt (combien de fois 
     //on exécute l'algorythme de hashage)
     bcrypt.hash(req.body.password, 10)
     //On récupère le hash de mdp qu'on enregistre dans un nouveau user
